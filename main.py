@@ -70,11 +70,11 @@ def main():
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = int(opts.batch_size_per_image) #default is 512
     cfg.OUTPUT_DIR = output_dir
     
-    # save config
-    with open(f"./config/trial{opts.trial_no}.yaml", "w") as f:
-        f.write(cfg.dump())
-    
     if opts.mode == "train":
+        # save config
+        with open(f"./config/train{opts.trial_no}.yaml", "w") as f:
+            f.write(cfg.dump())
+        # train
         train(cfg, data_dir, img_dir, opts.multiple, output_img_dir, load_ox=opts.load_ox, vis=False)
         metric = DetectRate(opts.trial_no, opts.threshold, data_dir, img_dir)
         metric.bestmodel(train_trial)

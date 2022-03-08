@@ -4,6 +4,10 @@ __pycache__/
 # data
 data/
 
+# config
+config/*.yaml
+!config/steel.yaml
+
 # log
 log/*.log
 !log/sample_train0_gpu6_bResNext-101_wd0.001_i500000.log
