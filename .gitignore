@@ -1,0 +1,13 @@
+# data
+data/
+
+# log
+log/*.log
+
+# sh_files
+sh_files/*.sh
+!sh_files/trial0.sh
+
+# augment csv
+/*vflip10.csv
+!MSoS_main_add.csv
