@@ -53,8 +53,7 @@ class Dataset():
         # for images
         for img in phase_image:
             image = OrderedDict() # dict per image
-            full_img_path = phase_dir + img # for file_name
-            image['file_name'] = full_img_path
+            image['file_name'] = img
             image['height'] = int(1000)
             image['width'] = int(2048)
             image['id'] = int(i)                      
@@ -128,7 +127,7 @@ class Dataset():
                 os.mkdir(d)
         
         # copy images
-        src = '../SSDD_DeepTool/SSDD_MSOS/Images/' # changeable
+        src = '/nas1/yjun/SSDD_DeepTool/SSDD_MSOS/Images/' # changeable
         for phase, phase_image, phase_dir in [('train', train_image, self.train_dir), ('val', val_image, self.val_dir), ('test', test_image, self.test_dir)]:
             for img in tqdm(phase_image, desc=f'{phase}_copy'):
                 shutil.copy(src + img, phase_dir + img)
@@ -196,7 +195,7 @@ class Dataset():
         origin_train = pd.DataFrame(columns=csv_data.columns)
 
         train_origin_dir = self.train_dir
-        train_aug_dir = self.dest_dir + f'train_aug{multiple}_cls/'
+        train_aug_dir = self.dest_dir + f'train_aug{multiple}/'
         os.makedirs(train_aug_dir, exist_ok=True)
 
         c, f, x0, y0, x1, y1, b = [], [], [], [], [], [], []
@@ -287,7 +286,7 @@ class Dataset():
         # annotation json file
         aug_img_list = list(set(total_train['Filename'].values))
         os.makedirs(self.annotation_dir, exist_ok=True)
-        self.annotation('train_aug', aug_img_list, train_aug_dir, self.annotation_dir)
+        self.annotation(f'train_aug{multiple}', aug_img_list, train_aug_dir, self.annotation_dir)
 
 if __name__ == "__main__":
     parser = OptionParser()

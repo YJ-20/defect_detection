@@ -24,9 +24,8 @@ def main():
     parser.add_option('--eval_period', dest='eval_period', default=5000)
     parser.add_option('--weight_decay', dest='weight_decay', default=0)
     parser.add_option('--multiple', dest='multiple', default=10) # number of random crop
-    parser.add_option("--proposal", dest="proposal", default=1)
     parser.add_option("--threshold", dest="threshold", default=0.3)
-    parser.add_option("--config", dest="config", default='/config/steel.yaml')
+    parser.add_option("--config", dest="config", default='./config/steel.yaml')
     parser.add_option("--backbone", dest="backbone", default='ResNext-101')
 
     # set type of parsers

@@ -4,7 +4,7 @@ from detectron2.data.datasets import coco
 def load_data(mode, data_dir, img_dir, multiple):
     if mode == 'train':
         # register data
-        train_dataset_dicts = coco.load_coco_json(data_dir + f"train_dataset_crop_vflip{multiple}_cls.json", img_dir + f"train_crop_vflip{multiple}_cls/", "my_dataset_train")
+        train_dataset_dicts = coco.load_coco_json(data_dir + f"train_aug{multiple}_dataset.json", img_dir + f"train_aug{multiple}/", "my_dataset_train")
         DatasetCatalog.register("my_dataset_train", lambda : train_dataset_dicts)
         print('register done!')
         
