@@ -1,4 +1,4 @@
-# !/bin/bash
+# <<caution>> run sh files at root directory of this repository.
 # run : nohup sh ./sh_files/sample_train0.sh &
 # kill : ps -ef | grep sample_train0.sh
 #		 kill -9 ######
