@@ -24,7 +24,7 @@ kill : `ps -ef | grep sample_train0.sh`
 
 ## Examples
 
-![example](https://user-images.githubusercontent.com/68987494/163675100-b48e1d3c-475d-48f9-907f-be5e1b625b72.png)
+![example](https://user-images.githubusercontent.com/68987494/163675207-4b75e278-7d44-4e65-954d-1216ba23f7ac.png)
 
 ## ToDo:
 
