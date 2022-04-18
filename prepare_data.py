@@ -14,6 +14,10 @@ class Dataset():
         csv_data = csv_data_na.copy()
         csv_data.dropna(inplace=True)
         csv_data.drop(csv_data.loc[csv_data['Field']==0].index, inplace=True)    # darkness field drop
+        csv_data.loc[csv_data['X0'] < 0, 'X0'] = 0  # coordinates cannot be negative value
+        csv_data.loc[csv_data['Y0'] < 0, 'Y0'] = 0  # coordinates cannot be negative value
+        csv_data.loc[csv_data['X1'] > 2048, 'X1'] = 2048
+        csv_data.loc[csv_data['Y1'] > 1000, 'Y1'] = 1000
         self.csv_data = csv_data
         self.data_dir = './data/'   # changeable
         self.dest_dir = self.data_dir + 'images/'
@@ -104,7 +108,7 @@ class Dataset():
         # equal distribution split for small categories
         category_id_list = [3, 6, 12, 13, 18, 20]    # dirtyscab, Machalhum, dgecrack, hole, pitscale, Ps_SurfaceEtc
         small_set, train_small, val_small, test_small = self.small(category_id_list)
-
+        
         img_part_set = img_set - small_set
         img_part_list = list(img_part_set)
         img_part_len = len(img_part_list)
@@ -119,8 +123,10 @@ class Dataset():
         random.shuffle(train_image)
         random.shuffle(val_image)
         random.shuffle(test_image)
-   
-
+        for img in train_image:
+            if not isinstance(img, str):
+                print(img)
+                
         # dir
         for d in [self.data_dir, self.dest_dir, self.train_dir, self.val_dir, self.test_dir, self.annotation_dir]:
             if not os.path.exists(d):
@@ -130,6 +136,10 @@ class Dataset():
         src = '/nas1/yjun/SSDD_DeepTool/SSDD_MSOS/Images/' # changeable
         for phase, phase_image, phase_dir in [('train', train_image, self.train_dir), ('val', val_image, self.val_dir), ('test', test_image, self.test_dir)]:
             for img in tqdm(phase_image, desc=f'{phase}_copy'):
+                try:
+                    shutil.copy(src + img, phase_dir + img)
+                except:
+                    print(src, img, phase_dir)
                 shutil.copy(src + img, phase_dir + img)
             self.annotation(phase, phase_image, phase_dir, self.annotation_dir)
 
