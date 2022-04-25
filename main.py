@@ -30,7 +30,6 @@ def main():
 
     # set type of parsers
     (opts, args) = parser.parse_args()
-    model_pth = 'model_' + str(opts.model_pth) + '.pth'
     
     # set path
     data_dir = f'./data/annotations/' # label path
@@ -47,7 +46,8 @@ def main():
 
     # use saved checkpoint model if model_pth parser exists
     train_trial = f"./saved_model/train_trial{opts.trial_no}/"
-    if bool(opts.model_pth):
+    if opts.mode=='train' and opts.model_pth:
+        model_pth = 'model_' + str(opts.model_pth) + '.pth'
         output_dir = f'./saved_model/train_trial{opts.trial_no}_continue/'
         output_img_dir = f'./saved_prediction/train_trial{opts.trial_no}_continue/'
         using_model = train_trial + model_pth
@@ -62,7 +62,7 @@ def main():
     cfg.merge_from_file(opts.config)
     cfg.TEST.EVAL_PERIOD = int(opts.eval_period)
     cfg.SOLVER.CHECKPOINT_PERIOD = int(opts.eval_period)
-    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(using_model) if using_model == backbone else using_model
+    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(using_model) if not opts.model_pth else using_model
     cfg.SOLVER.IMS_PER_BATCH = int(opts.ims_per_batch)
     cfg.SOLVER.BASE_LR = float(opts.base_lr)
     cfg.SOLVER.MAX_ITER = int(opts.max_iter)

@@ -23,3 +23,6 @@ sh_files/*.sh
 # augment csv
 /*vflip10.csv
 !MSoS_main_add.csv
+
+# temporary files
+metric_zekim.py

@@ -9,13 +9,16 @@ import numpy as np
 import cv2
 
 class DetectRate():
-    def __init__(self, trial_no, threshold, data_dir, img_dir):
+    def __init__(self, trial_no, threshold, data_dir, img_dir, using_model=False):
         self.trial_no = trial_no
-        self.threshold = threshold
+        self.threshold = float(threshold)
         self.cfg = get_cfg()
-        self.cfg.merge_from_file(f"./config/trial{self.trial_no}.yaml")
+        self.cfg.merge_from_file(f"./config/train{self.trial_no}.yaml")
         self.cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = self.threshold
+        self.cfg.DATASETS.TEST = ("my_dataset_test", )
         self.test_dataset_dicts = coco.load_coco_json(data_dir + "test_dataset.json", img_dir + "test/", "my_dataset_test")
+        if using_model:
+            self.cfg.MODEL.WEIGHTS = using_model
          
     def detectRate(self):
         predictor = DefaultPredictor(self.cfg)
@@ -82,7 +85,7 @@ class DetectRate():
         false_ratio_list = []
         result_pth_list = []
         detect_ratio_cls_list = []     
-        for model_pth in tqdm(model_pth_list[:int(len(model_pth_list)*0.35)], desc='model progress'):
+        for model_pth in model_pth_list[:int(len(model_pth_list)*0.35)]:
             print('='*20)
             print(model_pth)
             result_pth_list.append(model_pth)
@@ -108,10 +111,17 @@ if __name__ == "__main__":
     parser.add_option("--threshold", dest="threshold", default=0.3)
     
     (opts, args) = parser.parse_args()
-    model_pth = 'model_' + str(opts.model_pth) + '.pth'
-    
     data_dir = f'./data/annotations/' # label path
     img_dir = f'./data/images/' # image path    
+     
+    train_trial = f"./saved_model/train_trial{opts.trial_no}/"
     
-    metric = DetectRate(opts.trial_no, opts.threshold, data_dir, img_dir)
-    metric.detectRate()
+    if opts.model_pth:
+        model_pth = 'model_' + str(opts.model_pth) + '.pth'
+        using_model = train_trial + model_pth
+        metric = DetectRate(opts.trial_no, opts.threshold, data_dir, img_dir, using_model)
+        metric.detectRate()
+    
+    else:
+        metric = DetectRate(opts.trial_no, opts.threshold, data_dir, img_dir)
+        metric.bestmodel(train_trial)
